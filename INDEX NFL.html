@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quinielas NFL - General, Grupos y Depósitos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { background-color: #030712; color: #ffffff; font-family: system-ui, -apple-system, sans-serif; }
+    .card-dark { background-color: #0b1320; border: 1px solid #1e293b; }
+    .btn-green { background-color: #10b981; }
+    .btn-green:hover { background-color: #059669; }
+    .btn-blue { background-color: #1d4ed8; }
+    .btn-blue:hover { background-color: #1e40af; }
+    .btn-purple { background-color: #7c3aed; }
+    .btn-purple:hover { background-color: #6d28d9; }
+    .btn-red { background-color: #dc2626; }
+    .btn-red:hover { background-color: #b91c1c; }
+    .ad-banner { background-color: #1e293b; border: 1px dashed #38bdf8; }
+  </style>
+</head>
+<body class="flex flex-col items-center p-2 sm:p-6 min-h-screen">
+
+  <!-- BANNER PUBLICITARIO SUPERIOR -->
+  <div class="w-full max-w-md ad-banner rounded-xl p-2 mb-4 text-center">
+    <p class="text-[9px] text-sky-400 font-bold uppercase tracking-widest">Espacio Publicitario Monetizable</p>
+    <div class="h-10 flex items-center justify-center text-xs text-gray-400 italic">
+      <i class="fa-solid fa-rectangle-ad text-lg mr-2 text-sky-400"></i> Anuncios Google AdSense / Patrocinadores
+    </div>
+  </div>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <div class="w-full max-w-md space-y-5">
+
+    <!-- BARRA SUPERIOR DE USUARIO Y WALLET -->
+    <div class="card-dark p-3 rounded-2xl flex justify-between items-center bg-slate-900 border border-slate-800">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center border border-slate-700">
+          <i class="fa-solid fa-user text-xs text-amber-400"></i>
+        </div>
+        <div>
+          <p class="text-[10px] text-gray-400">Usuario Activo</p>
+          <p class="text-xs font-bold text-white">Fanático NFL</p>
+        </div>
+      </div>
+      <button onclick="switchScreen('screen-wallet')" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 px-3 py-1.5 rounded-xl text-right">
+        <p class="text-[9px] text-gray-400">Saldo Wallet</p>
+        <p class="text-xs font-black text-emerald-400" id="wallet-balance">$0.00 MXN <i class="fa-solid fa-wallet ml-1"></i></p>
+      </button>
+    </div>
+
+    <!-- 1. MENÚ PRINCIPAL -->
+    <section id="screen-main" class="card-dark rounded-3xl p-5 shadow-2xl space-y-5">
+      <div class="text-center">
+        <div class="inline-block border-2 border-white px-4 py-1.5 rounded-2xl bg-slate-900">
+          <i class="fa-solid fa-football text-amber-500 text-lg mr-2"></i>
+          <span class="font-black tracking-widest text-base">QUINIELAS <span class="text-red-600">NFL</span></span>
+        </div>
+      </div>
+
+      <!-- ALERTA DE PRUEBAS -->
+      <div class="bg-amber-950/40 border border-amber-500/30 p-2.5 rounded-xl text-[10px] text-amber-300 flex items-center gap-2">
+        <i class="fa-solid fa-circle-info text-amber-400 text-base"></i>
+        <span><b>Modo Híbrido:</b> Puedes jugar en la <b>Quiniela General</b> o crear <b>Grupos Privados</b>.</span>
+      </div>
+
+      <!-- SECCIÓN A: QUINIELA GENERAL / PÚBLICA -->
+      <div class="bg-slate-900 p-4 rounded-2xl border border-sky-500/40 space-y-3">
+        <div class="flex justify-between items-center">
+          <span class="text-xs font-black text-sky-400 tracking-wider flex items-center gap-1.5">
+            <i class="fa-solid fa-earth-americas text-base"></i> QUINIELA GENERAL (ABIERTA)
+          </span>
+          <span class="text-[9px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded font-bold">Global</span>
+        </div>
+        <p class="text-[11px] text-gray-300 leading-tight">Compite contra todos los usuarios de la plataforma por el primer lugar de la tabla global.</p>
+
+        <div class="grid grid-cols-2 gap-2 pt-1">
+          <button onclick="startQuiniela('general', 'semanal')" class="btn-blue text-white text-[11px] font-extrabold py-2.5 px-2 rounded-xl text-center shadow">
+            <i class="fa-solid fa-calendar-day mr-1"></i> Semana Actual
+          </button>
+          <button onclick="startQuiniela('general', 'temporada')" class="btn-purple text-white text-[11px] font-extrabold py-2.5 px-2 rounded-xl text-center shadow">
+            <i class="fa-solid fa-trophy mr-1"></i> Temporada (1-18)
+          </button>
+        </div>
+      </div>
+
+      <!-- SECCIÓN B: GRUPOS PRIVADOS -->
+      <div class="bg-slate-900 p-4 rounded-2xl border border-emerald-500/40 space-y-3">
+        <div class="flex justify-between items-center">
+          <span class="text-xs font-black text-emerald-400 tracking-wider flex items-center gap-1.5">
+            <i class="fa-solid fa-users text-base"></i> GRUPOS PRIVADOS (AMIGOS)
+          </span>
+          <span class="text-[9px] bg-emerald-950 text-emerald-300 px-2 py-0.5 rounded font-bold" id="display-group-code">CÓDIGO: NFL-8821</span>
+        </div>
+
+        <div class="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700 space-y-1 text-xs">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400">Grupo Activo:</span>
+            <span class="font-bold text-amber-400" id="display-group-name">Los de la Oficina</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400">Bolsa Acumulada:</span>
+            <span class="font-extrabold text-emerald-400" id="display-group-pot">$500 MXN</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <button onclick="startQuiniela('grupo', 'semanal')" class="btn-green text-white text-[11px] font-extrabold py-2.5 px-2 rounded-xl text-center shadow">
+            <i class="fa-solid fa-pen-to-square mr-1"></i> Semana Grupo
+          </button>
+          <button onclick="startQuiniela('grupo', 'temporada')" class="btn-red text-white text-[11px] font-extrabold py-2.5 px-2 rounded-xl text-center shadow">
+            <i class="fa-solid fa-trophy mr-1"></i> Temporada Grupo
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-800">
+          <button onclick="switchScreen('screen-create-group')" class="bg-slate-800 hover:bg-slate-700 text-emerald-400 text-[10px] font-bold py-2 rounded-lg text-center border border-slate-700">
+            <i class="fa-solid fa-plus mr-1"></i> Crear Grupo
+          </button>
+          <button onclick="switchScreen('screen-join-group')" class="bg-slate-800 hover:bg-slate-700 text-sky-400 text-[10px] font-bold py-2 rounded-lg text-center border border-slate-700">
+            <i class="fa-solid fa-key mr-1"></i> Unirse con Código
+          </button>
+        </div>
+      </div>
+
+      <!-- NAVEGACIÓN RÁPIDA -->
+      <div class="grid grid-cols-2 gap-3">
+        <button onclick="openLeaderboard()" class="card-dark p-3 rounded-xl flex flex-col items-center gap-1 hover:bg-slate-800 transition">
+          <i class="fa-solid fa-ranking-star text-amber-400 text-lg"></i>
+          <span class="text-[10px] font-bold">VER RANKINGS</span>
+        </button>
+        <button onclick="switchScreen('screen-my-bets')" class="card-dark p-3 rounded-xl flex flex-col items-center gap-1 hover:bg-slate-800 transition">
+          <i class="fa-solid fa-layer-group text-sky-400 text-lg"></i>
+          <span class="text-[10px] font-bold">MIS GRUPOS</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 2. WALLET / MÓDULO DE DEPÓSITOS -->
+    <section id="screen-wallet" class="card-dark rounded-3xl p-5 space-y-4 hidden">
+      <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+        <button onclick="switchScreen('screen-main')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-arrow-left text-lg"></i></button>
+        <h2 class="font-bold text-base">MI WALLET Y DEPÓSITOS</h2>
+        <div class="w-4"></div>
+      </div>
+
+      <div class="p-4 bg-slate-900 rounded-2xl border border-slate-800 text-center space-y-1">
+        <p class="text-xs text-gray-400">Saldo Actual en la Plataforma</p>
+        <p class="text-3xl font-black text-emerald-400" id="wallet-balance-big">$0.00 MXN</p>
+      </div>
+
+      <!-- FORMULARIO DE DEPÓSITO -->
+      <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800 space-y-3 text-xs">
+        <h3 class="font-bold text-emerald-400 text-sm flex items-center gap-1.5">
+          <i class="fa-solid fa-money-bill-transfer"></i> Agregar Saldo / Depositar
+        </h3>
+
+        <div>
+          <label class="text-gray-400 font-semibold mb-1 block">Monto a Depositar (MXN)</label>
+          <div class="relative">
+            <span class="absolute left-3 top-3 text-gray-400 font-bold">$</span>
+            <input type="number" id="deposit-amount" placeholder="100" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 pl-7 text-white font-bold focus:outline-none focus:border-emerald-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-400 font-semibold mb-1 block">Método de Pago</label>
+          <select id="payment-method" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-emerald-500 font-medium">
+            <option value="card">💳 Tarjeta de Débito / Crédito (Instantáneo)</option>
+            <option value="spei">🏦 Transferencia SPEI (Sin Comisión)</option>
+            <option value="oxxo">🏪 Depósito en Efectivo (OXXO Pay)</option>
+          </select>
+        </div>
+
+        <button onclick="handleDeposit()" class="w-full btn-green text-white font-extrabold py-3.5 rounded-xl shadow-lg text-xs mt-2 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-lock"></i> PROCESAR DEPÓSITO SEGURO
+        </button>
+      </div>
+
+      <!-- AVISO LEGAL Y SIMULACIÓN DE PRUEBAS -->
+      <div class="p-3 bg-slate-900 border border-slate-800 rounded-xl text-[10px] text-gray-400 space-y-1">
+        <p class="font-bold text-amber-400 flex items-center gap-1">
+          <i class="fa-solid fa-shield-halved"></i> Pasarela de Pagos Protegida
+        </p>
+        <p>Los saldos agregados son válidos para inscripciones en Quinielas Generales y Torneos Oficiales.</p>
+      </div>
+    </section>
+
+    <!-- CREAR GRUPO PRIVADO -->
+    <section id="screen-create-group" class="card-dark rounded-3xl p-5 space-y-4 hidden">
+      <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+        <button onclick="switchScreen('screen-main')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-arrow-left text-lg"></i></button>
+        <h2 class="font-bold text-base text-emerald-400">Crear Grupo Privado</h2>
+        <div class="w-4"></div>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="text-gray-400 font-semibold mb-1 block">Nombre del Grupo</label>
+          <input type="text" id="new-group-name" placeholder="Ej. Amigos de la Universidad" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-emerald-500">
+        </div>
+        <div>
+          <label class="text-gray-400 font-semibold mb-1 block">Monto acordado en físico por participante</label>
+          <input type="number" id="new-group-bet" placeholder="$100" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-emerald-500">
+        </div>
+        <div>
+          <label class="text-gray-400 font-semibold mb-1 block">Encargado del dinero en físico</label>
+          <input type="text" id="new-group-admin" placeholder="Ej. Carlos" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-emerald-500">
+        </div>
+      </div>
+      <button onclick="handleCreateGroup()" class="w-full btn-green text-white font-extrabold py-3.5 rounded-xl shadow-lg text-xs">CREAR GRUPO Y GENERAR CÓDIGO</button>
+    </section>
+
+    <!-- UNIRSE A GRUPO -->
+    <section id="screen-join-group" class="card-dark rounded-3xl p-5 space-y-4 hidden">
+      <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+        <button onclick="switchScreen('screen-main')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-arrow-left text-lg"></i></button>
+        <h2 class="font-bold text-base text-sky-400">Unirse a un Grupo</h2>
+        <div class="w-4"></div>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="text-gray-400 font-semibold mb-1 block">Ingresa el Código Privado</label>
+          <input type="text" id="join-code-input" placeholder="Ej. NFL-8821" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white uppercase text-center font-extrabold tracking-widest focus:outline-none focus:border-sky-500 text-sm">
+        </div>
+      </div>
+      <button onclick="handleJoinGroup()" class="w-full btn-blue text-white font-extrabold py-3.5 rounded-xl shadow-lg text-xs">UNIRSE AL GRUPO</button>
+    </section>
+
+    <!-- 3. QUINIELA SEMANAL (GENERAL O GRUPO) -->
+    <section id="screen-quiniela" class="card-dark rounded-3xl p-5 shadow-2xl space-y-4 hidden">
+      <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+        <button onclick="switchScreen('screen-main')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-arrow-left text-lg"></i></button>
+        <div class="text-center">
+          <h2 class="font-bold text-base" id="week-title">Semana 1</h2>
+          <p class="text-[10px] text-sky-400 font-bold" id="quiniela-mode-badge">Quiniela General Abierta</p>
+        </div>
+        <div class="w-4"></div>
+      </div>
+
+      <!-- TEMPORIZADOR Y FECHA DE CIERRE -->
+      <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800 text-center space-y-1">
+        <p class="text-[11px] text-gray-400">Cierre de Pronósticos: <span class="text-white font-bold">Jueves - 6:00 PM</span></p>
+        <p id="lock-timer" class="text-emerald-400 font-extrabold text-xs tracking-wider">ESTADO: ABIERTO PARA JUGAR</p>
+      </div>
+
+      <!-- REGLAS DE PUNTUACIÓN -->
+      <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800 text-center grid grid-cols-3 gap-1 text-[10px]">
+        <div class="bg-emerald-950/60 p-1 rounded border border-emerald-800/50"><span class="font-bold text-emerald-400">Ganador:</span> 3 PTS</div>
+        <div class="bg-amber-950/60 p-1 rounded border border-amber-800/50"><span class="font-bold text-amber-400">Si Empatan:</span> 1 PT</div>
+        <div class="bg-slate-800 p-1 rounded"><span class="font-bold text-gray-400">Derrota:</span> 0 PTS</div>
+      </div>
+
+      <div id="matches-container" class="space-y-3 max-h-[360px] overflow-y-auto pr-1"></div>
+
+      <button id="btn-save-weekly" onclick="saveQuiniela('Semanal')" class="w-full btn-green text-white font-extrabold py-3.5 rounded-xl shadow-lg text-xs">GUARDAR MIS PRONÓSTICOS</button>
+    </section>
+
+    <!-- 3.B QUINIELA TEMPORADA COMPLETA (18 SEMANAS) -->
+    <section id="screen-quiniela-temporada" class="card-dark rounded-3xl p-5 shadow-2xl space-y-4 hidden">
+      <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+        <button onclick="switchScreen('screen-main')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-arrow-left text-lg"></i></button>
+        <div class="text-center">
+          <h2 class="font-bold text-base text-purple-400"><i class="fa-solid fa-trophy mr-1"></i> TEMPORADA COMPLETA</h2>
+          <p class="text-[10px] text-purple-300 font-bold" id="quiniela-temp-mode-badge">Quiniela General Abierta</p>
+        </div>
+        <div class="w-4"></div>
+      </div>
+
+      <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800 text-center space-y-2">
+        <p class="text-xs text-gray-300">Selecciona la Semana a pronosticar:</p>
+        <select id="season-week-select" onchange="loadSeasonWeek(this.value)" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs font-bold text-white focus:outline-none">
+        </select>
+      </div>
+
+      <div id="season-matches-container" class="space-y-3 max-h-[340px] overflow-y-auto pr-1"></div>
+
+      <button id="btn-save-season" onclick="saveQuiniela('Temporada')" class="w-full btn-purple text-white font-extrabold py-3.5 rounded-xl shadow-lg text-xs">GUARDAR PRONÓSTICOS DE LA SEMANA</button>
+    </section>
+
+    <!-- 4. CONFIRMACIÓN DE PRONÓSTICOS -->
+    <section id="screen-confirm" class="card-dark rounded-3xl p-8 text-center space-y-5 hidden">
+      <div class="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto border-2 border-emerald-500">
+        <i class="fa-solid fa-check text-emerald-400 text-4xl"></i>
+      </div>
+      <div>
+        <h3 class="text-xl font-bold">¡Pronósticos Registrados!</h3>
+        <p class="text-xs text-gray-400 mt-1">Tus jugadas han sido guardadas con éxito.</p>
+      </div>
+
+      <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 text-xs space-y-1">
+        <p class="font-bold text-emerald-400" id="confirm-mode-name">Modo: Quiniela General Abierta</p>
+        <p class="text-gray-300" id="confirm-type-title">Pronósticos Guardados</p>
+      </div>
+
+      <button onclick="openLeaderboard()" class="w-full border border-slate-700 hover:bg-slate-800 py-3 rounded-xl text-xs font-bold">VER TABLA DE POSICIONES</button>
+    </section>
+
+    <!-- 5. TABLA DE POSICIONES -->
+    <section id="screen-leaderboard" class="card-dark rounded-3xl p-5 space-y-4 hidden">
+      <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+        <button onclick="switchScreen('screen-main')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-arrow-left text-lg"></i></button>
+        <div class="text-center">
+          <h2 class="font-bold text-base" id="board-main-title">RANKING GENERAL</h2>
+          <p class="text-[10px] text-amber-400 font-bold" id="board-sub-title">Comunidad Global</p>
+        </div>
+        <div class="w-4"></div>
+      </div>
+
+      <div class="flex justify-center gap-2 border-b border-slate-800 pb-2">
+        <button onclick="switchLeaderboardTab('general')" id="tab-btn-general" class="px-3 py-1 bg-sky-600 text-white text-xs font-bold rounded-lg">General Abierta</button>
+        <button onclick="switchLeaderboardTab('grupo')" id="tab-btn-grupo" class="px-3 py-1 bg-slate-800 text-gray-400 text-xs font-bold rounded-lg">Mi Grupo Privado</button>
+      </div>
+
+      <div id="board-pot-box" class="p-3 bg-emerald-950/50 border border-emerald-500/30 rounded-xl text-xs flex justify-between items-center hidden">
+        <div>
+          <p class="text-gray-400">Bolsa del Grupo:</p>
+          <p class="font-black text-emerald-400 text-base" id="board-pot">$500 MXN</p>
+        </div>
+        <div class="text-right">
+          <p class="text-gray-400">Cobrador en Físico:</p>
+          <p class="font-bold text-white" id="board-admin">Carlos</p>
+        </div>
+      </div>
+
+      <div class="space-y-2 text-xs" id="leaderboard-list"></div>
+    </section>
+
+    <!-- 6. MIS GRUPOS PRIVADOS -->
+    <section id="screen-my-bets" class="card-dark rounded-3xl p-5 space-y-4 hidden">
+      <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+        <button onclick="switchScreen('screen-main')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-arrow-left text-lg"></i></button>
+        <h2 class="font-bold text-base">MIS GRUPOS PRIVADOS</h2>
+        <div class="w-4"></div>
+      </div>
+      <div id="my-groups-list" class="space-y-3"></div>
+    </section>
+
+  </div>
+
+  <!-- BANNER PUBLICITARIO INFERIOR -->
+  <div class="w-full max-w-md mt-6 ad-banner rounded-xl p-3 text-center">
+    <p class="text-[9px] text-sky-400 font-bold uppercase tracking-widest">Publicidad Patrocinada</p>
+    <div class="h-10 flex items-center justify-center text-xs text-gray-400 italic">
+      <i class="fa-solid fa-bullhorn text-sky-400 mr-2"></i> Anúnciate con la comunidad NFL
+    </div>
+  </div>
+
+  <!-- LÓGICA JAVASCRIPT -->
+  <script>
+    const ESPN_API_URL = 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard';
+
+    // Estado Global de la App
+    let isQuinielaOpen = true; 
+    let currentMode = 'general'; 
+    let userBalance = 0.00;
+
+    let activeGroup = {
+      name: "Los de la Oficina",
+      betPerPerson: 100,
+      membersCount: 5,
+      admin: "Carlos",
+      code: "NFL-8821"
+    };
+
+    function updateWalletUI() {
+      const balanceText = `$${userBalance.toFixed(2)} MXN`;
+      document.getElementById('wallet-balance').innerHTML = `${balanceText} <i class="fa-solid fa-wallet ml-1"></i>`;
+      document.getElementById('wallet-balance-big').textContent = balanceText;
+    }
+
+    function handleDeposit() {
+      const amountInput = document.getElementById('deposit-amount');
+      const amount = parseFloat(amountInput.value);
+      const method = document.getElementById('payment-method').value;
+
+      if (isNaN(amount) || amount <= 0) {
+        alert('Por favor ingresa un monto válido a depositar.');
+        return;
+      }
+
+      // Proceso simulado de depósito
+      userBalance += amount;
+      updateWalletUI();
+      amountInput.value = '';
+
+      let methodText = "Tarjeta de Débito/Crédito";
+      if (method === 'spei') methodText = "Transferencia SPEI";
+      if (method === 'oxxo') methodText = "Ficha de Pago OXXO Pay";
+
+      alert(`¡Depósito Exitoso!\nSe han agregado $${amount.toFixed(2)} MXN a tu saldo usando ${methodText}.`);
+    }
+
+    function updateGroupUI() {
+      const totalPot = activeGroup.betPerPerson * activeGroup.membersCount;
+      document.getElementById('display-group-name').textContent = activeGroup.name;
+      document.getElementById('display-group-pot').textContent = `$${totalPot} MXN`;
+      document.getElementById('display-group-code').textContent = `CÓDIGO: ${activeGroup.code}`;
+      document.getElementById('board-pot').textContent = `$${totalPot} MXN`;
+      document.getElementById('board-admin').textContent = activeGroup.admin;
+      renderMyGroups();
+    }
+
+    function generate18WeeksSelector() {
+      const select = document.getElementById('season-week-select');
+      select.innerHTML = '';
+      for (let i = 1; i <= 18; i++) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = `Semana ${i}`;
+        select.appendChild(option);
+      }
+    }
+
+    function switchScreen(screenId) {
+      const screens = ['screen-main', 'screen-wallet', 'screen-quiniela', 'screen-quiniela-temporada', 'screen-confirm', 'screen-leaderboard', 'screen-my-bets', 'screen-create-group', 'screen-join-group'];
+      screens.forEach(id => document.getElementById(id).classList.add('hidden'));
+      document.getElementById(screenId).classList.remove('hidden');
+    }
+
+    function startQuiniela(mode, type) {
+      currentMode = mode;
+      const modeText = mode === 'general' ? 'Quiniela General (Pública)' : `Grupo: ${activeGroup.name}`;
+      
+      document.getElementById('quiniela-mode-badge').textContent = modeText;
+      document.getElementById('quiniela-temp-mode-badge').textContent = modeText;
+
+      if (type === 'semanal') {
+        switchScreen('screen-quiniela');
+      } else {
+        switchScreen('screen-quiniela-temporada');
+        loadSeasonWeek(document.getElementById('season-week-select').value);
+      }
+    }
+
+    function saveQuiniela(modalidad) {
+      if (!isQuinielaOpen) {
+        alert('Lo sentimos, el tiempo límite expiró y los partidos han comenzado. Ya no se pueden modificar los pronósticos.');
+        return;
+      }
+      const modeText = currentMode === 'general' ? 'Quiniela General (Pública)' : `Grupo Privado: ${activeGroup.name}`;
+      document.getElementById('confirm-mode-name').textContent = modeText;
+      document.getElementById('confirm-type-title').textContent = `Pronóstico de ${modalidad} guardado.`;
+      switchScreen('screen-confirm');
+    }
+
+    function openLeaderboard() {
+      switchScreen('screen-leaderboard');
+      switchLeaderboardTab(currentMode);
+    }
+
+    function switchLeaderboardTab(tab) {
+      const btnGeneral = document.getElementById('tab-btn-general');
+      const btnGrupo = document.getElementById('tab-btn-grupo');
+      const potBox = document.getElementById('board-pot-box');
+      const container = document.getElementById('leaderboard-list');
+
+      if (tab === 'general') {
+        btnGeneral.className = "px-3 py-1 bg-sky-600 text-white text-xs font-bold rounded-lg";
+        btnGrupo.className = "px-3 py-1 bg-slate-800 text-gray-400 text-xs font-bold rounded-lg";
+        document.getElementById('board-main-title').textContent = "RANKING GENERAL";
+        document.getElementById('board-sub-title').textContent = "Comunidad Global";
+        potBox.classList.add('hidden');
+
+        container.innerHTML = `
+          <div class="flex justify-between px-3 text-gray-400 font-bold">
+            <span>Pos.</span><span>Jugador</span><span>Récord</span><span>PUNTOS</span>
+          </div>
+          <div class="flex justify-between p-3 bg-slate-900/80 rounded-lg items-center">
+            <span class="w-6 h-6 bg-amber-500 text-black font-black rounded-full flex items-center justify-center text-[10px]">1</span>
+            <span class="font-bold">ProPicker_NFL</span>
+            <span class="text-gray-400 text-[11px]">16 Vic / 0 Emp</span>
+            <span class="font-black text-sky-400 text-sm">48 PTS</span>
+          </div>
+          <div class="flex justify-between p-3 bg-slate-900/80 rounded-lg items-center border border-sky-500/50">
+            <span class="font-bold text-sky-400">142</span>
+            <span class="font-bold text-sky-400">Tú (Fanático NFL)</span>
+            <span class="text-sky-300 text-[11px]">0 Vic / 0 Emp</span>
+            <span class="font-black text-sky-400 text-sm">0 PTS</span>
+          </div>
+        `;
+      } else {
+        btnGrupo.className = "px-3 py-1 bg-emerald-600 text-white text-xs font-bold rounded-lg";
+        btnGeneral.className = "px-3 py-1 bg-slate-800 text-gray-400 text-xs font-bold rounded-lg";
+        document.getElementById('board-main-title').textContent = "RANKING DE GRUPO";
+        document.getElementById('board-sub-title').textContent = activeGroup.name;
+        potBox.classList.remove('hidden');
+
+        container.innerHTML = `
+          <div class="flex justify-between px-3 text-gray-400 font-bold">
+            <span>Pos.</span><span>Amigo</span><span>Récord</span><span>PUNTOS</span>
+          </div>
+          <div class="flex justify-between p-3 bg-slate-900/80 rounded-lg items-center">
+            <span class="w-6 h-6 bg-amber-500 text-black font-black rounded-full flex items-center justify-center text-[10px]">1</span>
+            <span class="font-bold">Sergio</span>
+            <span class="text-gray-400 text-[11px]">15 Vic / 1 Emp</span>
+            <span class="font-black text-emerald-400 text-sm">46 PTS</span>
+          </div>
+          <div class="flex justify-between p-3 bg-slate-900/80 rounded-lg items-center">
+            <span class="w-6 h-6 bg-gray-300 text-black font-black rounded-full flex items-center justify-center text-[10px]">2</span>
+            <span class="font-bold">Juan</span>
+            <span class="text-gray-400 text-[11px]">12 Vic / 0 Emp</span>
+            <span class="font-black text-emerald-400 text-sm">36 PTS</span>
+          </div>
+          <div class="flex justify-between p-3 bg-slate-900/40 rounded-lg items-center border border-emerald-500/50 mt-2">
+            <span class="font-bold text-emerald-400">4</span>
+            <span class="font-bold text-emerald-400">Tú</span>
+            <span class="text-emerald-300 text-[11px]">0 Vic / 0 Emp</span>
+            <span class="font-black text-emerald-400 text-sm">0 PTS</span>
+          </div>
+        `;
+      }
+    }
+
+    function handleCreateGroup() {
+      const name = document.getElementById('new-group-name').value;
+      const bet = parseFloat(document.getElementById('new-group-bet').value);
+      const admin = document.getElementById('new-group-admin').value;
+
+      if (!name || isNaN(bet) || !admin) {
+        alert('Por favor completa todos los datos.');
+        return;
+      }
+
+      const randomCode = 'NFL-' + Math.floor(1000 + Math.random() * 9000);
+      activeGroup = { name, betPerPerson: bet, membersCount: 1, admin, code: randomCode };
+      updateGroupUI();
+      alert(`¡Grupo Creado Exitosamente!\nComparte el Código: ${randomCode}`);
+      switchScreen('screen-main');
+    }
+
+    function handleJoinGroup() {
+      const code = document.getElementById('join-code-input').value.trim();
+      if (!code) { alert('Ingresa un código válido.'); return; }
+      activeGroup.membersCount += 1;
+      updateGroupUI();
+      alert('¡Te has unido exitosamente al grupo!');
+      switchScreen('screen-main');
+    }
+
+    function renderMyGroups() {
+      const container = document.getElementById('my-groups-list');
+      const totalPot = activeGroup.betPerPerson * activeGroup.membersCount;
+      container.innerHTML = `
+        <div class="card-dark p-4 rounded-xl space-y-3 border border-emerald-500/50">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-sm text-amber-400">${activeGroup.name}</span>
+            <span class="text-[10px] text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded font-bold">Código: ${activeGroup.code}</span>
+          </div>
+          <p class="text-xs text-gray-400">${activeGroup.membersCount} Participantes | Acumulado: $${totalPot} MXN</p>
+          <div class="text-xs text-gray-400">Cobrador: <b class="text-white">${activeGroup.admin}</b></div>
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <button onclick="startQuiniela('grupo', 'semanal')" class="btn-green text-white font-bold py-2 rounded-lg text-xs">Pronóstico Grupo</button>
+            <button onclick="openLeaderboard()" class="border border-slate-700 hover:bg-slate-800 py-2 rounded-lg text-xs font-bold">Ver Ranking</button>
+          </div>
+        </div>
+      `;
+    }
+
+    async function fetchNFLSchedule() {
+      const container = document.getElementById('matches-container');
+      try {
+        const response = await fetch(ESPN_API_URL);
+        const data = await response.json();
+        if (data.week && data.week.number) {
+          document.getElementById('week-title').textContent = `Semana ${data.week.number}`;
+        }
+        renderMatches(data.events, container, 'weekly');
+      } catch (error) {
+        console.error('Error al obtener partidos:', error);
+      }
+    }
+
+    async function loadSeasonWeek(weekNum) {
+      const container = document.getElementById('season-matches-container');
+      container.innerHTML = `
+        <div class="text-center py-8 text-gray-400">
+          <i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i>
+          <p class="text-xs">Cargando partidos de la Semana ${weekNum}...</p>
+        </div>`;
+
+      try {
+        const response = await fetch(`${ESPN_API_URL}?week=${weekNum}`);
+        const data = await response.json();
+        renderMatches(data.events, container, `season_w${weekNum}`);
+      } catch (error) {
+        console.error('Error al cargar semana:', error);
+      }
+    }
+
+    function renderMatches(events, container, prefix) {
+      container.innerHTML = '';
+      if(!events || events.length === 0) {
+        container.innerHTML = '<p class="text-center text-xs text-gray-400 py-4">No hay partidos programados para esta semana.</p>';
+        return;
+      }
+
+      events.forEach((event) => {
+        const competition = event.competitions[0];
+        const home = competition.competitors.find(c => c.homeAway === 'home');
+        const away = competition.competitors.find(c => c.homeAway === 'away');
+
+        const matchCard = document.createElement('div');
+        matchCard.className = 'bg-slate-900/60 p-3 rounded-xl border border-slate-800 space-y-2';
+        
+        const isDisabled = !isQuinielaOpen ? 'disabled' : '';
+
+        matchCard.innerHTML = `
+          <div class="flex items-center justify-between text-xs font-bold">
+            <span class="flex items-center gap-1.5">
+              <img src="${away.team.logo}" class="w-4 h-4 object-contain">
+              ${away.team.shortDisplayName} (Visitante)
+            </span>
+            <span class="text-[10px] text-gray-500 font-normal">VS</span>
+            <span class="flex items-center gap-1.5">
+              (Local) ${home.team.shortDisplayName}
+              <img src="${home.team.logo}" class="w-4 h-4 object-contain">
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <label class="flex items-center justify-between bg-slate-800/80 p-2.5 rounded-lg text-xs cursor-pointer hover:bg-slate-700">
+              <span class="font-bold text-gray-200">${away.team.name}</span>
+              <input type="radio" name="${prefix}_match_${event.id}" value="${away.team.id}" ${isDisabled} class="accent-emerald-500 w-4 h-4">
+            </label>
+
+            <label class="flex items-center justify-between bg-slate-800/80 p-2.5 rounded-lg text-xs cursor-pointer hover:bg-slate-700">
+              <span class="font-bold text-gray-200">${home.team.name}</span>
+              <input type="radio" name="${prefix}_match_${event.id}" value="${home.team.id}" ${isDisabled} class="accent-emerald-500 w-4 h-4">
+            </label>
+          </div>
+        `;
+        container.appendChild(matchCard);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      generate18WeeksSelector();
+      fetchNFLSchedule();
+      updateGroupUI();
+      updateWalletUI();
+    });
+  </script>
+</body>
+</html>
